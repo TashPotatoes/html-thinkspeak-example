@@ -43,7 +43,7 @@ $(document).ready(function () {
   //
   // parses data into a format more suitable for nvd3
   //
-  function toNv(tsData) {
+  function toNvLineChart(tsData) {
     var d, f, i, len, results;
     results = [];
     for (i = 0, len = TS_FIELDS.length; i < len; i++) {
@@ -91,8 +91,8 @@ $(document).ready(function () {
   // I'm sure you can figure this one our your self,
   // I'm too tired to write helpful comments anymore
   //
-  function rxdata(newdata, chart) {
-    var newdata = toNv(newdata);
+  function handleData(newdata, chart) {
+    var newdata = toNvLineChart(newdata);
     console.debug(newdata);
     var field1 = newdata[0];
     var last = field1.values[field1.values.length-1];
@@ -114,7 +114,7 @@ $(document).ready(function () {
     // fetches json from the specied url
     //
     $.getJSON(jsonURL, function(data) {
-      return rxdata(data, chart);
+      return handleData(data, chart);
     });
   };
 
