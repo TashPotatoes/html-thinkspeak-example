@@ -1,0 +1,8 @@
+h1, p, a, li {
+  font-family: sans-serif;
+}
+
+.container {
+  width: 723px;
+  margin: 0 auto;
+}
