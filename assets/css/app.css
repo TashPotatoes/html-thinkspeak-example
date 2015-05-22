@@ -2,7 +2,16 @@ h1, p, a, li {
   font-family: sans-serif;
 }
 
+svg {
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  height: 250px;
+  width: 100%;
+}
+
 .container {
+  max-width: 90%;
   width: 723px;
   margin: 0 auto;
 }
