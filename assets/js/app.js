@@ -105,6 +105,72 @@ $(document).ready(function () {
     }
   }
 
+
+
+  function linearPlot(a, b) {
+    var xa = a[0], ya = a[1]; 
+    var xb = b[0], yb = b[1]; 
+    var m = (yb - ya) / (xb - xa);
+    return function (x) {
+      return (m * (x - xa)) + ya;   
+    };
+  }
+
+  function multiLinearPlot (lines) {
+    var equations = []; // [(min, max, equation)] 
+    var left, right, eq;
+
+    var lastIndex = lines.length-2;
+
+    var min = lines[0][0];
+    var max = lines[lastIndex][0];
+
+    for (var i = 0; i < lines.length-1; i++) {
+      left  = lines[i]; 
+      right = lines[i+1]; 
+      eq    = linearPlot(left, right); 
+
+      equations.push([left[0], right[0], eq]);
+    }
+  }
+
+  function colorCurve (colors) {
+    var i, color;
+
+    var rBuff = []; // [(Num, RNum)]
+    var bBuff = []; // [(Num, BNum)]
+    var gBuff = []; // [(Num, GNum)]
+
+    for (i in colors) {
+      color = colors[i];
+      rBuff.push([color[0], color[1][0]]);
+      gBuff.push([color[0], color[1][1]]);
+      bBuff.push([color[0], color[1][2]]);
+    }
+
+    var r = Sfty.Util.Math.multiLinearPlot(rBuff);
+    var g = Sfty.Util.Math.multiLinearPlot(gBuff);
+    var b = Sfty.Util.Math.multiLinearPlot(bBuff);
+
+    return function (i) {
+      return new net.brehaut.Color([r(i), g(i), b(i)]);
+    };
+  }
+
+
+
+  colorCurve([
+      [-20, [75, 178, 225],
+      [13], [250, 255, 161],
+      [60], [255, 90, 57],
+    ]);
+
+  function assignColours(){
+    //document.getElementById('tree_top').setAttribute('cx',150);
+
+  }
+
+
   //
   // will get called on each draw
   //
