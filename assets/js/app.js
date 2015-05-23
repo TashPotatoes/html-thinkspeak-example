@@ -129,5 +129,8 @@ $(document).ready(function () {
   // setInterval(function () {
   //   update(lineChart);
   // }, interval);
+  $.get('assets/svg/ugly.svg', function (data) {
+    $('.container').append(data.childNodes[1]);
+  });
 
 });
