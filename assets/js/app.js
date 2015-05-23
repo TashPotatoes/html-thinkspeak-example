@@ -118,16 +118,16 @@ $(document).ready(function () {
     });
   };
 
-  //
-  // do the initial draw of the chart
-  //
-  update(lineChart);
+  // //
+  // // do the initial draw of the chart
+  // //
+  // update(lineChart);
 
-  //
-  // will continious redraw chart
-  //
-  setInterval(function () {
-    update(lineChart);
-  }, interval);
+  // //
+  // // will continious redraw chart
+  // //
+  // setInterval(function () {
+  //   update(lineChart);
+  // }, interval);
 
 });

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="everything" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 179.5 185.5" enable-background="new 0 0 179.5 185.5" xml:space="preserve">
+<polygon id="ground" fill="#FF00FF" points="48,131 0,131 34,167 91.5,185.5 158,158.3 179.5,131 "/>
+<polygon id="tree_x5F_bot" fill="#00FF00" points="48,131 89,131 80,87 54,87 "/>
+<polygon id="log" fill="#F7931E" points="96.8,158 105.1,154.9 141,125.5 141,118 132,114 94,141.5 89,148.4 89.8,158 "/>
+<g id="tree_x5F_mid">
+	<polygon fill="#00FFFF" points="53.8,87 47.9,64.2 20.5,52 112,52 84,65.1 80,87 	"/>
+</g>
+<g id="tree_x5F_top">
+	<polygon fill="#FFFF00" points="20.5,52 0,31.4 20.5,6.7 66.2,0 112,5.7 132,30.1 112,52 	"/>
+</g>
+</svg>
