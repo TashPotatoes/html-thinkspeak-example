@@ -132,6 +132,23 @@ $(document).ready(function () {
 
       equations.push([left[0], right[0], eq]);
     }
+
+    return function (x) {
+      if (x >= min && max >= x) {
+        var i, eq;
+        for (i in equations) {
+          eq = equations[i]; 
+          if (!(x >= eq[0] && eq[1] >= x)) { continue; } 
+          return eq[2](x);
+        }
+      }
+      else if (x < min) {
+        return equations[0][2](x);        
+      }
+      else if (x > max) {
+        return equations[lastIndex][2](x);        
+      }
+    };
   }
 
   function colorCurve (colors) {
@@ -148,26 +165,13 @@ $(document).ready(function () {
       bBuff.push([color[0], color[1][2]]);
     }
 
-    var r = Sfty.Util.Math.multiLinearPlot(rBuff);
-    var g = Sfty.Util.Math.multiLinearPlot(gBuff);
-    var b = Sfty.Util.Math.multiLinearPlot(bBuff);
+    var r = multiLinearPlot(rBuff);
+    var g = multiLinearPlot(gBuff);
+    var b = multiLinearPlot(bBuff);
 
     return function (i) {
       return new net.brehaut.Color([r(i), g(i), b(i)]);
     };
-  }
-
-
-
-  colorCurve([
-      [-20, [75, 178, 225],
-      [13], [250, 255, 161],
-      [60], [255, 90, 57],
-    ]);
-
-  function assignColours(){
-    //document.getElementById('tree_top').setAttribute('cx',150);
-
   }
 
 
@@ -183,14 +187,33 @@ $(document).ready(function () {
     // fetches json from the specied url
     //
     $.getJSON(jsonURL, function(data) {
-      console.log(data);
-      return changeLoop();
+      return updateVis(data.feeds[0]);
     });
   };
 
 
-  function changeLoop () {
-    console.log(Date.now());
+  var colours = colorCurve([
+    [-20, [75, 178, 225]],
+    [13, [250, 255, 161]],
+    [60, [255, 90, 57]],
+  ]);
+
+
+  function updateVis (data) {
+    console.log(Date.now(), data);
+    var colorMap = [
+      ['ground',       'field1'],
+      ['log',          'field2'],
+      ['treeBot', 'field3'],
+      ['treeMid', 'field4'],
+      ['treeTop', 'field5']
+    ];
+
+    colorMap.forEach(function (column) {
+      var color = colours(data[column[1]]).toCSSHex();
+      $('#'+column[0]).attr('fill', color);
+      $('#'+column[0]+'Temp').text(data[column[1]]+'°');
+    });
   }
 
 
