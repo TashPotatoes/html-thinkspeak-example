@@ -7,7 +7,7 @@ $(document).ready(function () {
   //
   // the domain for think speak
   //
-  var TS_DOMAIN = "https://api.thingspeak.com/";
+
 
   //
   // desired thingspeak fields
@@ -82,9 +82,9 @@ $(document).ready(function () {
   //
   var n = 100;
   var data = [{'key': 'No Data', 'values': [{x: 0, y: 0}]}];
-  var interval = 16000;
+
   var duration = 1000;
-  var channel = 17393;
+
   var oldlast = 0;
 
   //
@@ -108,29 +108,31 @@ $(document).ready(function () {
   //
   // will get called on each draw
   //
-  function update (chart) {
+  function update () {
+    var n = 200;
+    var channel = 39055;
+    var TS_DOMAIN = "https://api.thingspeak.com/";
     var jsonURL = TS_DOMAIN + ("channels/" + channel + "/feed.json?results=" + n);
     //
     // fetches json from the specied url
     //
     $.getJSON(jsonURL, function(data) {
-      return handleData(data, chart);
+      console.log(data);
+      return changeLoop();
     });
   };
 
-  // //
-  // // do the initial draw of the chart
-  // //
-  // update(lineChart);
 
-  // //
-  // // will continious redraw chart
-  // //
-  // setInterval(function () {
-  //   update(lineChart);
-  // }, interval);
+  function changeLoop () {
+    console.log(Date.now());
+  }
+
+
   $.get('assets/svg/ugly.svg', function (data) {
     $('.container').append(data.childNodes[1]);
+    var interval = 16000;
+    setInterval(update, interval);
+    update();
   });
 
 });
