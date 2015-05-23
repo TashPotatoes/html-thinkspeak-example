@@ -7,7 +7,7 @@ $(document).ready(function () {
   //
   // the domain for think speak
   //
-  var TS_DOMAIN = "https://api.thingspeak.com/";
+
 
   //
   // desired thingspeak fields
@@ -82,9 +82,9 @@ $(document).ready(function () {
   //
   var n = 100;
   var data = [{'key': 'No Data', 'values': [{x: 0, y: 0}]}];
-  var interval = 16000;
+
   var duration = 1000;
-  var channel = 17393;
+
   var oldlast = 0;
 
   //
@@ -132,6 +132,23 @@ $(document).ready(function () {
 
       equations.push([left[0], right[0], eq]);
     }
+
+    return function (x) {
+      if (x >= min && max >= x) {
+        var i, eq;
+        for (i in equations) {
+          eq = equations[i]; 
+          if (!(x >= eq[0] && eq[1] >= x)) { continue; } 
+          return eq[2](x);
+        }
+      }
+      else if (x < min) {
+        return equations[0][2](x);        
+      }
+      else if (x > max) {
+        return equations[lastIndex][2](x);        
+      }
+    };
   }
 
   function colorCurve (colors) {
@@ -148,9 +165,9 @@ $(document).ready(function () {
       bBuff.push([color[0], color[1][2]]);
     }
 
-    var r = Sfty.Util.Math.multiLinearPlot(rBuff);
-    var g = Sfty.Util.Math.multiLinearPlot(gBuff);
-    var b = Sfty.Util.Math.multiLinearPlot(bBuff);
+    var r = multiLinearPlot(rBuff);
+    var g = multiLinearPlot(gBuff);
+    var b = multiLinearPlot(bBuff);
 
     return function (i) {
       return new net.brehaut.Color([r(i), g(i), b(i)]);
@@ -158,45 +175,53 @@ $(document).ready(function () {
   }
 
 
-
-  colorCurve([
-      [-20, [75, 178, 225],
-      [13], [250, 255, 161],
-      [60], [255, 90, 57],
-    ]);
-
-  function assignColours(){
-    //document.getElementById('tree_top').setAttribute('cx',150);
-
-  }
-
-
   //
   // will get called on each draw
   //
-  function update (chart) {
+  function update () {
+    var n = 200;
+    var channel = 39055;
+    var TS_DOMAIN = "https://api.thingspeak.com/";
     var jsonURL = TS_DOMAIN + ("channels/" + channel + "/feed.json?results=" + n);
     //
     // fetches json from the specied url
     //
     $.getJSON(jsonURL, function(data) {
-      return handleData(data, chart);
+      return updateVis(data.feeds[0]);
     });
   };
 
-  // //
-  // // do the initial draw of the chart
-  // //
-  // update(lineChart);
 
-  // //
-  // // will continious redraw chart
-  // //
-  // setInterval(function () {
-  //   update(lineChart);
-  // }, interval);
+  var colours = colorCurve([
+    [-20, [75, 178, 225]],
+    [13, [250, 255, 161]],
+    [60, [255, 90, 57]],
+  ]);
+
+
+  function updateVis (data) {
+    console.log(Date.now(), data);
+    var colorMap = [
+      ['ground',       'field1'],
+      ['log',          'field2'],
+      ['treeBot', 'field3'],
+      ['treeMid', 'field4'],
+      ['treeTop', 'field5']
+    ];
+
+    colorMap.forEach(function (column) {
+      var color = colours(data[column[1]]).toCSSHex();
+      $('#'+column[0]).attr('fill', color);
+      $('#'+column[0]+'Temp').text(data[column[1]]+'°');
+    });
+  }
+
+
   $.get('assets/svg/ugly.svg', function (data) {
     $('.container').append(data.childNodes[1]);
+    var interval = 16000;
+    setInterval(update, interval);
+    update();
   });
 
 });
